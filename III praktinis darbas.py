@@ -132,7 +132,7 @@ if component_to_delete: # Jei pienas randamas
     session.commit() # Pokyciai issaugomi duomenu bazeje
     print("MAXIMA pieno komponentas(component_maxima_pienas) ištrintas.")
 else: # Jei pienas nerandamas
-    print("IKI vandens komponentas(component_to_delete) nerastas.")
+    print("MAXIMA pieno komponentas(component_maxima_pienas) nerastas.")
 
 
 

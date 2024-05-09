@@ -68,7 +68,7 @@ Component.__table__
 from sqlalchemy.orm import sessionmaker
 
 # Sukuriamas engine
-engine = create_engine('sqlite:///:memory:', echo=False)
+engine = create_engine('sqlite:///:memory:', echo=True)
 
 # Sukuriama duomenu bazes schema
 Base.metadata.create_all(engine)
@@ -102,19 +102,6 @@ session.add_all([shop_iki, shop_maxima, item_iki_duona, item_iki_pienas, item_ma
 
 # Commitinami pokyčiai duombazeje
 session.commit()
-"""
-    Užduotis #3
-    Pakeičia IKI vandens quantity iš 1.00 į 1.45
-    Ištrina MAXIMA Aukštaičių pieno komponentą 'Pienas'.
-
-    Parametrai:
-        query_iki_vanduo - paieškos kintamasis, naudojamas rasti vandens komponentą.
-        component_to_delete - paieškos kintamasis, naudojamas ištrinti pieno komponentą.
-    
-    Rezultatas:
-    Vandens kiekis pakeistas iš 1.00 į 1.45, Maximos pieno komponentas ištrintas.
-
-"""
 """
     Užduotis #3
     Pakeičia IKI vandens quantity iš 1.00 į 1.45

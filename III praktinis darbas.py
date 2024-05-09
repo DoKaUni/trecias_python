@@ -161,4 +161,88 @@ for shop in shops:
         # Išspausdinamas kiekvienos prekės komponentas 
         for component in item.components:
             print(f"{component.name}: {component.quantity}")
+ 
+"""
         
+ Užduotis #5
+    5 Užklausos, vykdančios šiuos dalykus:
+    Atrenkamos prekės, kurios turi susietų komponentų
+    Atrenkamos prekės, kurių pavadinime yra tekstas 'ien'
+    Suskaičiuojama iš kiek komponentų sudaryta kiekviena prekė
+    Suskaičiuojamas kiekvienos prekės komponentų kiekis (quantity)
+    Grąžinama visų prekių informaciją, įskaitant kur jos yra.
+    
+    Rezultatas:
+    Kiekvienai užklausai rezultatas atitinkamai skirtingas:
+    Prekės, turinčios susietų komponentų
+    Prekės, kurių pavadinime yra tekstas 'ien'
+    Skaičius, reiškiantis komponentų kiekį kiekvienoje prekėje
+    Skaičius, reiškiantis prekės komponentų kiekį (quantity kintamasis)
+    Visa prekių informacija
+
+"""
+
+# Prekės, kurių komponentai sutampa
+
+from sqlalchemy import distinct
+
+# Randami visi komponentai, kurie nesikartoja (yra unikalūs)
+components = session.query(Component.name).distinct().all()
+
+print("\nPrekės, kurios turi bendrus komponentus: ")
+for component_name in components: # Kiekvienam komponentui gautam sąraše:
+    # Išfiltruojamos visos prekės, kurių komponentai sutampa
+    shared_items = session.query(Item).filter(Item.components.any(Component.name == component_name[0])).all()
+    
+    # Išspausdinamos visos prekės, kurios turi tą patį komponentą
+    print(f"Prekės su komponentu '{component_name[0]}':")
+    for item in shared_items:
+        print(f"Prekė: {item.name}")
+
+# Prekės, kurių pavadinime yra 'ien'
+
+# Išfiltruojamos visos prekės, kurių pavadinime yra 'ien'
+ien_items = session.query(Item).filter(Item.name.like('%ien%')).all()
+
+print("\nPrekės, kuriose yra 'ien': ")
+# Išspausdina rezultatus
+for item in ien_items:
+    print(item.name)
+
+# Prekių komponentų suskaičiavimas
+
+# Gaunamos visos prekės
+items = session.query(Item).all()
+
+print("\nKomponentų prekėse skaičiai: ")
+for item in items: # Iteruojama pro kiekvieną prekę
+    print(f"Prekė: {item.name}")
+    print(f"Komponentų: {len(item.components)}")
+
+# Komponentų kiekio prekėse suskaičiavimas
+
+print("\nKiekvienos prekės komponentų kiekis: ")
+
+# Gaunamos visos prekės
+items = session.query(Item).all()
+
+for item in items: # Iteruojama pro kiekvieną prekę
+    print(f"Prekė: {item.name}")
+    for component in item.components: # Iteruojama pro kiekvieną komponentą
+        print(f"Komponentas: {component.name}, kiekis: {component.quantity}") # Išspausdinamas komponento pavadinimas ir jo kiekis
+
+# Pasirinktų duomenų užklausa (Visų prekių detali informacija)
+
+print("\nKiekvienos prekės pilna informacija: ")
+
+items = session.query(Item).all() # Gaunamos visos prekės
+for item in items:
+    print(f"Prekė: {item.name}") 
+    print(f"Aprašymas: {item.description}")
+    print(f"Kaina: {item.unit_price}")
+    print(f"Sukurta: {item.created_at}")
+    shop = session.query(Shop).filter(Shop.id == item.shop_id).first() # Surandama parduotuvė, pagal prekės parduotuvės ID
+    if shop: # Jei randama parduotuvė, išspausdinamas jos pavadinimas bei adresas
+        print(f"Galima rasti: {shop.name}")
+        print(f"Adresas: {shop.address}")
+    print("----")

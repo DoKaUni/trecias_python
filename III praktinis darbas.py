@@ -48,15 +48,62 @@ class Component(Base):
     item_id = Column(ForeignKey("items.id")) # Svetimas raktas iš items
     item = relationship("Item", back_populates = "components") # Ryšys su Item klase
 
-engine = create_engine("sqlite:///:memory:", echo=True)
-
 Shop.__table__
 Item.__table__
 Component.__table__
 
-Base.metadata.create_all(engine)
-
 """
     Užduotis #2
+    Sukuriami įrašai duomenų bazės lentelėse iš pirmos užduoties tryjų klasių
+
+    Parametrai:
+        Shop įrašai 
+        Item įrašai
+        Component įrašai
+
+    Rezultatas:
+    Programa užpildo duomenų bazės lenteles su konkrečiais parduotuvių, prekių ir komponentų įrašais
+"""
+
+from sqlalchemy.orm import sessionmaker
+
+# Sukuriamas engine
+engine = create_engine('sqlite:///:memory:', echo=True)
+
+# Sukuriama duomenu bazes schema
+Base.metadata.create_all(engine)
+
+# Sukuriama sesija
+Session = sessionmaker(bind=engine)
+session = Session()
+
+# Sukuriami Shop irašai
+shop_iki = Shop(name='IKI', address='Kaunas, Iki gatvė 1')
+shop_maxima = Shop(name='MAXIMA', address='Kaunas, Maksima gatvė 2')
+
+# Sukuriami Item irašai
+item_iki_duona = Item(barcode='112233112233', name='Žemaičių duona', unit_price=1.55, shop=shop_iki)
+item_pienas_zemaitija = Item(barcode='33333222111', description='Pienas iš Žemaitijos', name='Žemaičių pienas', unit_price=2.69, shop=shop_iki)
+item_duona_aukstaitija = Item(barcode='99898989898', name='Aukštaičių duona', unit_price=1.65, shop=shop_maxima)
+item_pienas_austaitija = Item(barcode='99919191991', description='Pienas iš Aukštaitijos', name='Aukštaičių pienas', unit_price=2.99, shop=shop_maxima)
+
+# Sukuriami Component irašai
+component_iki_duona_miltai = Component(name='Miltai', quantity=1.50, item=item_iki_duona)
+component_iki_duona_vanduo = Component(name='Vanduo', quantity=1.00, item=item_iki_duona)
+component_iki_pienas_pienas = Component(name='Pienas', quantity=1.00, item=item_pienas_zemaitija)
+component_maxima_duona_miltai = Component(name='Miltai', quantity=1.60, item=item_duona_aukstaitija)
+component_maxima_duona_vanduo = Component(name='Vanduo', quantity=1.10, item=item_duona_aukstaitija)
+component_maxima_pienas_pienas = Component(name='Pienas', quantity=1.10, item=item_pienas_austaitija)
+
+# Pridedami irašai sesijai
+session.add_all([shop_iki, shop_maxima, item_iki_duona, item_pienas_zemaitija, item_duona_aukstaitija, item_pienas_austaitija,
+                 component_iki_duona_miltai, component_iki_duona_vanduo, component_iki_pienas_pienas,
+                 component_maxima_duona_miltai, component_maxima_duona_vanduo, component_maxima_pienas_pienas])
+
+# Commitinami pokyčiai duombazeje
+session.commit()
+
+"""
+    Užduotis #3
     ...
 """

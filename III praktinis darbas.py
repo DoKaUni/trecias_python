@@ -102,7 +102,6 @@ session.add_all([shop_iki, shop_maxima, item_iki_duona, item_iki_pienas, item_ma
 
 # Commitinami pokyčiai duombazeje
 session.commit()
-
 """
     Užduotis #3
     Pakeičia IKI vandens quantity iš 1.00 į 1.45
@@ -142,10 +141,11 @@ component_to_delete = session.query(Component).filter(Component.name == 'Pienas'
 
 if component_to_delete: # Jei pienas randamas
     session.delete(component_to_delete) # Istrinamas komponentas
-    session.commit() # Pokyciai issaugomi duomenu bazeje
     print("MAXIMA pieno komponentas(component_maxima_pienas) ištrintas.")
 else: # Jei pienas nerandamas
     print("IKI vandens komponentas(component_to_delete) nerastas.")
+    
+session.commit() # Pokyciai issaugomi duomenu bazeje
 
 """
     Užduotis #4

@@ -131,5 +131,34 @@ if component_to_delete: # Jei pienas randamas
     print("MAXIMA pieno komponentas(component_maxima_pienas) ištrintas.")
 else: # Jei pienas nerandamas
     print("IKI vandens komponentas(component_to_delete) nerastas.")
-
+    
 session.commit() # Pokyciai issaugomi duomenu bazeje
+
+"""
+    Užduotis #4
+    Išspausdina visų parduotuvių prekes bei jų komponentus.
+
+    Parametrai:
+       shops - grąžina visas parduotuves, įskaitant jų prekes bei komponentus.
+    
+    Rezultatas:
+    Išspausdinami visų parduotuvių prekės bei komponentai.
+
+"""
+
+# Gaunamos visos sukurtos parduotuvės, kartu su jų duomenimis
+shops = session.query(Shop).all()
+
+# Iteruojama per kiekvieną parduotuvę
+for shop in shops:
+    print("---")
+    print(f"Parduotuvė: {shop.name}")# Išspausdinamas parduotuvės pavadinimas
+    print("Prekės:")
+    # Išspausdinama kiekviena prekė, esanti parduotuvėje
+    for item in shop.items:
+        print(f"Prekė: {item.name}")
+        print("Komponentai:")
+        # Išspausdinamas kiekvienos prekės komponentas 
+        for component in item.components:
+            print(f"{component.name}: {component.quantity}")
+        

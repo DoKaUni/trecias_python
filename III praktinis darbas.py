@@ -105,5 +105,34 @@ session.commit()
 
 """
     Užduotis #3
-    ...
+    Pakeičia IKI vandens quantity iš 1.00 į 1.45
+    Ištrina MAXIMA Aukštaičių pieno komponentą 'Pienas'.
+
+    Parametrai:
+        query_iki_vanduo - paieškos kintamasis, naudojamas rasti vandens komponentą.
+        component_to_delete - paieškos kintamasis, naudojamas ištrinti pieno komponentą.
+    
+    Rezultatas:
+    Vandens kiekis pakeistas iš 1.00 į 1.45, Maximos pieno komponentas ištrintas.
+
 """
+# Randamas komponentas, t.y. iki vanduo
+query_iki_vanduo = session.query(Component).filter(Component.name == 'Vanduo' and Component.item == item_iki_duona)
+if query_iki_vanduo: # Jei vanduo randamas
+    query_iki_vanduo.quantity = 1.45 # Pakeiciamas vandens kiekis i 1.45 is 1.00
+    print("IKI vandens kiekis pakeistas į: " + str(query_iki_vanduo.quantity))
+else: # Jei vanduo nerandamas
+    print("IKI vandens komponentas(component_iki_vanduo) nerastas.")
+
+#Randamas komponentas, t.y. MAXIMA pienas
+component_to_delete = session.query(Component).filter(Component.name == 'Pienas' and Component.item == item_maxima_pienas).first()
+
+if component_to_delete: # Jei pienas randamas
+    session.delete(component_to_delete) # Istrinamas komponentas
+    session.commit() # Pokyciai issaugomi duomenu bazeje
+    print("MAXIMA pieno komponentas(component_maxima_pienas) ištrintas.")
+else: # Jei pienas nerandamas
+    print("IKI vandens komponentas(component_to_delete) nerastas.")
+
+
+

@@ -68,7 +68,7 @@ Component.__table__
 from sqlalchemy.orm import sessionmaker
 
 # Sukuriamas engine
-engine = create_engine('sqlite:///:memory:', echo=False)
+engine = create_engine('sqlite:///:memory:', echo=True)
 
 # Sukuriama duomenu bazes schema
 Base.metadata.create_all(engine)
@@ -136,13 +136,20 @@ session.commit() # Pokyciai issaugomi duomenu bazeje
 
 """
     Užduotis #5
-    
-
-    Parametrai:
-        
+    5 Užklausos, vykdančios šiuos dalykus:
+    Atrenkamos prekės, kurios turi susietų komponentų
+    Atrenkamos prekės, kurių pavadinime yra tekstas 'ien'
+    Suskaičiuojama iš kiek komponentų sudaryta kiekviena prekė
+    Suskaičiuojamas kiekvienos prekės komponentų kiekis (quantity)
+    Grąžinama visų prekių informaciją, įskaitant kur jos yra.
     
     Rezultatas:
-    
+    Kiekvienai užklausai rezultatas atitinkamai skirtingas:
+    Prekės, turinčios susietų komponentų
+    Prekės, kurių pavadinime yra tekstas 'ien'
+    Skaičius, reiškiantis komponentų kiekį kiekvienoje prekėje
+    Skaičius, reiškiantis prekės komponentų kiekį (quantity kintamasis)
+    Visa prekių informacija
 
 """
 

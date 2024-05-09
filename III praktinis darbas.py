@@ -68,7 +68,7 @@ Component.__table__
 from sqlalchemy.orm import sessionmaker
 
 # Sukuriamas engine
-engine = create_engine('sqlite:///:memory:', echo=True)
+engine = create_engine('sqlite:///:memory:', echo=False)
 
 # Sukuriama duomenu bazes schema
 Base.metadata.create_all(engine)
@@ -116,8 +116,21 @@ session.commit()
     Vandens kiekis pakeistas iš 1.00 į 1.45, Maximos pieno komponentas ištrintas.
 
 """
+"""
+    Užduotis #3
+    Pakeičia IKI vandens quantity iš 1.00 į 1.45
+    Ištrina MAXIMA Aukštaičių pieno komponentą 'Pienas'.
+
+    Parametrai:
+        query_iki_vanduo - paieškos kintamasis, naudojamas rasti vandens komponentą.
+        component_to_delete - paieškos kintamasis, naudojamas ištrinti pieno komponentą.
+    
+    Rezultatas:
+    Vandens kiekis pakeistas iš 1.00 į 1.45, Maximos pieno komponentas ištrintas.
+
+"""
 # Randamas komponentas, t.y. iki vanduo
-query_iki_vanduo = session.query(Component).filter(Component.name == 'Vanduo' and Component.item == item_iki_duona)
+query_iki_vanduo = session.query(Component).filter(Component.name == 'Vanduo' and Component.item == item_iki_duona).first()
 if query_iki_vanduo: # Jei vanduo randamas
     query_iki_vanduo.quantity = 1.45 # Pakeiciamas vandens kiekis i 1.45 is 1.00
     print("IKI vandens kiekis pakeistas į: " + str(query_iki_vanduo.quantity))
@@ -125,7 +138,7 @@ else: # Jei vanduo nerandamas
     print("IKI vandens komponentas(component_iki_vanduo) nerastas.")
 
 #Randamas komponentas, t.y. MAXIMA pienas
-component_to_delete = session.query(Component).filter(Component.name == 'Pienas' and Component.item == item_maxima_pienas).first()
+component_to_delete = session.query(Component).filter(Component.name == 'Pienas', Component.item == item_maxima_pienas).first()
 
 if component_to_delete: # Jei pienas randamas
     session.delete(component_to_delete) # Istrinamas komponentas
@@ -134,5 +147,31 @@ if component_to_delete: # Jei pienas randamas
 else: # Jei pienas nerandamas
     print("IKI vandens komponentas(component_to_delete) nerastas.")
 
+"""
+    Užduotis #4
+    Išspausdina visų parduotuvių prekes bei jų komponentus.
 
+    Parametrai:
+       shops - grąžina visas parduotuves, įskaitant jų prekes bei komponentus.
+    
+    Rezultatas:
+    Išspausdinami visų parduotuvių prekės bei komponentai.
 
+"""
+
+# Gaunamos visos sukurtos parduotuvės, kartu su jų duomenimis
+shops = session.query(Shop).all()
+
+# Iteruojama per kiekvieną parduotuvę
+for shop in shops:
+    print("---")
+    print(f"Parduotuvė: {shop.name}")# Išspausdinamas parduotuvės pavadinimas
+    print("Prekės:")
+    # Išspausdinama kiekviena prekė, esanti parduotuvėje
+    for item in shop.items:
+        print(f"Prekė: {item.name}")
+        print("Komponentai:")
+        # Išspausdinamas kiekvienos prekės komponentas 
+        for component in item.components:
+            print(f"{component.name}: {component.quantity}")
+        
